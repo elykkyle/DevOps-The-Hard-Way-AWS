@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-devopsthehardway"
+    bucket = "terraform-state-devopsthehardway-9686831"
     key    = "eks-terraform-workernodes.tfstate"
     region = "us-east-1"
   }
@@ -9,6 +9,10 @@ terraform {
       source = "hashicorp/aws"
     }
   }
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
 
 
@@ -47,7 +51,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly-EK
 
 ## Create the EKS cluster
 resource "aws_eks_cluster" "devopsthehardway-eks" {
-  name = "devopsthehardway-cluster"
+  name     = "devopsthehardway-cluster"
   role_arn = aws_iam_role.eks-iam-role.arn
 
   vpc_config {
@@ -100,7 +104,7 @@ resource "aws_eks_node_group" "worker-node-group" {
   node_group_name = "devopsthehardway-workernodes"
   node_role_arn   = aws_iam_role.workernodes.arn
   subnet_ids      = [var.subnet_id_1, var.subnet_id_2]
-  instance_types = ["t3.xlarge"]
+  instance_types  = ["t3.xlarge"]
 
   scaling_config {
     desired_size = 1
